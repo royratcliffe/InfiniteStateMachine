@@ -1,0 +1,12 @@
+#!/bin/sh
+# Prettify staged .object JSON files (CODESYS project objects) before commit.
+# Not run automatically: enable with `git config core.hooksPath .githooks`.
+# Must use LF line endings: git-bash's sh fails to parse CRLF scripts.
+hook_dir="$(dirname "$0")"
+# Try python3/python/py in order since availability varies by platform.
+PYTHON="$(command -v python3 || command -v python || command -v py)"
+if [ -z "$PYTHON" ]; then
+    echo "pre-commit: python not found, skipping .object prettification" >&2
+    exit 0
+fi
+"$PYTHON" "$hook_dir/prettify_json.py"
