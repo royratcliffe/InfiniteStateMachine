@@ -9,6 +9,9 @@ SECTION_SUFFIX = " --- *)"
 # Everything else will appear after the listed sections.
 SECTION_ORDERING = ["Interface", "Implementation"]
 
+DEFAULT_ROOT = "project"
+DEFAULT_ST = "st"
+
 
 def unwrap_string(value):
     """Strip the CODESYS "(string)" type-tag prefix used on raw string values."""
