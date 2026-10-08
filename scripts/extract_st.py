@@ -47,7 +47,7 @@ def find_text_blobs(node, label, results):
             find_text_blobs(item, label, results)
 
 
-def extract(path):
+def extract(path, root):
     """Return (name, [(section_label, text), ...]) for one .object file, or None."""
     with open(path, "r", encoding="utf-8-sig") as f:
         try:
@@ -59,7 +59,7 @@ def extract(path):
     find_text_blobs(data.get("payload", {}).get("object", {}), "", results)
     if not results:
         return None
-    return object_name(data, fallback_from_path(path)), results
+    return object_name(data, fallback_from_path(path.relative_to(root))), results
 
 
 def write_st_file(output_dir, name, sections):
@@ -118,7 +118,7 @@ def main():
     # search for .object files and extract their text content.
     count = 0
     for path in sorted(root.rglob("*.object")):
-        extracted = extract(path)
+        extracted = extract(path, root)
         if extracted is None:
             continue
         name, sections = extracted
