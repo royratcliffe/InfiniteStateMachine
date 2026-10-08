@@ -1,0 +1,8 @@
+# Do not ignore Python files
+!*.py
+
+# Ignore Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
