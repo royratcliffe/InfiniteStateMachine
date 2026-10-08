@@ -16,13 +16,14 @@ TextDocument. The script validates all labels before writing any project file.
 import argparse
 import json
 import sys
-import os
 from collections import defaultdict
 from pathlib import Path
 from st import (
     STRING_PREFIX,
     SECTION_PREFIX,
     SECTION_SUFFIX,
+    DEFAULT_ROOT,
+    DEFAULT_ST,
     object_name,
     fallback_from_path,
 )
@@ -132,12 +133,12 @@ def update_object(path, source_path, root, dry_run=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "root", nargs="?", default="project", help="project object directory"
+        "root", nargs="?", default=DEFAULT_ROOT, help="project object directory"
     )
     parser.add_argument(
         "-i",
         "--input-dir",
-        default="extracted_st",
+        default=DEFAULT_ST,
         help="directory containing extracted .st files",
     )
     parser.add_argument(

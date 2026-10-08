@@ -15,7 +15,14 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from st import SECTION_ORDERING, unwrap_string, object_name, fallback_from_path
+from st import (
+    SECTION_ORDERING,
+    DEFAULT_ROOT,
+    DEFAULT_ST,
+    unwrap_string,
+    object_name,
+    fallback_from_path,
+)
 
 
 def find_text_blobs(node, label, results):
@@ -86,13 +93,13 @@ def main():
     parser.add_argument(
         "root",
         nargs="?",
-        default="project",
+        default=DEFAULT_ROOT,
         help="directory to search for .object files",
     )
     parser.add_argument(
         "-o",
         "--output-dir",
-        default="extracted_st",
+        default=DEFAULT_ST,
         help="directory to write .st files to",
     )
     parser.add_argument(
