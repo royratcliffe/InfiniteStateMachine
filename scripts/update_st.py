@@ -16,29 +16,16 @@ TextDocument. The script validates all labels before writing any project file.
 import argparse
 import json
 import sys
+import os
 from collections import defaultdict
 from pathlib import Path
-
-STRING_PREFIX = "(string)"
-SECTION_PREFIX = "(* --- "
-SECTION_SUFFIX = " --- *)"
-
-
-def unwrap_string(value):
-    """Strip the CODESYS ``(string)`` type-tag prefix from a raw value."""
-    if isinstance(value, str) and value.startswith(STRING_PREFIX):
-        return value[len(STRING_PREFIX) :]
-    return value
-
-
-def object_name(data, fallback):
-    """Return the declared object name, or ``fallback`` when it is unavailable."""
-    try:
-        name = data["payload"]["meta"]["Graph"]["@Value"]["Name"]
-    except (KeyError, TypeError):
-        return fallback
-    name = unwrap_string(name)
-    return name if isinstance(name, str) and name else fallback
+from st import (
+    STRING_PREFIX,
+    SECTION_PREFIX,
+    SECTION_SUFFIX,
+    object_name,
+    fallback_from_path,
+)
 
 
 def find_text_documents(node, label, results):
@@ -92,7 +79,7 @@ def parse_st_file(path):
     return dict(sections)
 
 
-def load_object(path):
+def load_object(path, root):
     """Read an object and return its source name and TextDocument map."""
     with path.open("r", encoding="utf-8-sig") as file:
         data = json.load(file)
@@ -101,12 +88,12 @@ def load_object(path):
     by_label = defaultdict(list)
     for label, value in documents:
         by_label[label].append(value)
-    return data, object_name(data, path.stem), by_label
+    return data, object_name(data, fallback_from_path(path.relative_to(root))), by_label
 
 
-def update_object(path, source_path, dry_run=False):
+def update_object(path, source_path, root, dry_run=False):
     """Apply ST sections from ``source_path`` to its matching project object."""
-    data, name, documents = load_object(path)
+    data, name, documents = load_object(path, root)
     source_sections = parse_st_file(source_path)
 
     if "" in source_sections and len(documents) != 1:
@@ -163,7 +150,7 @@ def main():
     objects = {}
     for path in sorted(root.rglob("*.object")):
         try:
-            _, name, documents = load_object(path)
+            _, name, documents = load_object(path, root)
         except (json.JSONDecodeError, OSError):
             continue
         if documents:
@@ -173,8 +160,10 @@ def main():
 
     updated = 0
     # Recursively search for all .st files in the input directory.
+    # Match the source paths against the object names derived from the relative paths.
+    # Remove the file extension from the relative path to get the object name.
     for source_path in sorted(input_dir.rglob("*.st")):
-        object_path = objects.get(source_path.stem)
+        object_path = objects.get(str(source_path.relative_to(input_dir).with_suffix("")))
         if object_path is None:
             print(
                 f"update_st: skipping {source_path} (no matching object)",
@@ -182,7 +171,7 @@ def main():
             )
             continue
         try:
-            name, changed = update_object(object_path, source_path, args.dry_run)
+            name, changed = update_object(object_path, source_path, root, args.dry_run)
         except (json.JSONDecodeError, OSError, ValueError) as error:
             raise SystemExit(f"update_st: {error}") from error
         updated += changed

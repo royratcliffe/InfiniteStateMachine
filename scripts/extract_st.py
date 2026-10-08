@@ -14,33 +14,8 @@ writes one .st file per object.
 import argparse
 import json
 import sys
-import os
 from pathlib import Path
-
-STRING_PREFIX = "(string)"
-
-# The order in which sections should appear in the output .st file.
-# Interface sections should appear before Implementation sections.
-# Everything else will appear after the listed sections.
-SECTION_ORDERING = ["Interface", "Implementation"]
-
-
-def unwrap_string(value):
-    """Strip the CODESYS "(string)" type-tag prefix used on raw string values."""
-    if isinstance(value, str) and value.startswith(STRING_PREFIX):
-        return value[len(STRING_PREFIX) :]
-    return value
-
-
-def object_name(data, fallback):
-    """Return the object's declared name (payload.meta.Graph.@Value.Name), or fallback."""
-    try:
-        name = data["payload"]["meta"]["Graph"]["@Value"]["Name"]
-    except (KeyError, TypeError):
-        return fallback
-    name = unwrap_string(name)
-    # If the name is valid, prepend it with the fallback path.
-    return f"{fallback}/{name}" if isinstance(name, str) and name else fallback
+from st import SECTION_ORDERING, unwrap_string, object_name, fallback_from_path
 
 
 def find_text_blobs(node, label, results):
@@ -77,11 +52,7 @@ def extract(path):
     find_text_blobs(data.get("payload", {}).get("object", {}), "", results)
     if not results:
         return None
-    # Construct the object name using the fallback derived from the file path.
-    # The fallback derives from the file path by taking all parts except the first and last,
-    # the last part, and joining them with "/".
-    fallback = os.sep.join([part.rsplit("_", 1)[0] for part in path.parts][1:-1])
-    return object_name(data, fallback), results
+    return object_name(data, fallback_from_path(path)), results
 
 
 def write_st_file(output_dir, name, sections):
