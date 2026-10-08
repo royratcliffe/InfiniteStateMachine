@@ -37,7 +37,7 @@
               "TextDocument": {
                 "@Type": "f3878285",
                 "@Value": {
-                  "TextBlobForSerialisation": "(string)PROPERTY SuperState : IState",
+                  "TextBlobForSerialisation": "(string)PROPERTY SuperState : IState\n",
                   "LineInfoPersistence": "(string)117cc3ab-dc36-4647-8a63-b7117f155ab6_Decl_LineIds"
                 }
               }

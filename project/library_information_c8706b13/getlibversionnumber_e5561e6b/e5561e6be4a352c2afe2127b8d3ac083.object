@@ -95,7 +95,7 @@
               "TextDocument": {
                 "@Type": "f3878285",
                 "@Value": {
-                  "TextBlobForSerialisation": "(string)// This function has been automatically generated from the project information.\nFUNCTION GetLibVersionNumber : DWORD\nVAR_INPUT\n\t\nEND_VAR",
+                  "TextBlobForSerialisation": "(string)// This function has been automatically generated from the project information.\nFUNCTION GetLibVersionNumber : DWORD\nVAR_INPUT\n\t\nEND_VAR\n",
                   "LineInfoPersistence": "(string)e5561e6b-e4a3-52c2-afe2-127b8d3ac083_Decl_LineIds"
                 }
               }

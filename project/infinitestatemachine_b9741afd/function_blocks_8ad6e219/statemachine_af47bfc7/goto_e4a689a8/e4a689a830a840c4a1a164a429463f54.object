@@ -50,7 +50,7 @@
               "TextDocument": {
                 "@Type": "f3878285",
                 "@Value": {
-                  "TextBlobForSerialisation": "(string)METHOD PUBLIC GoTo\nVAR_INPUT\n\titfState : IState;\nEND_VAR\nVAR\n\tfbStateMachine : StateMachine;\n\tiDepth : INT := 0;\nEND_VAR",
+                  "TextBlobForSerialisation": "(string)METHOD PUBLIC GoTo\nVAR_INPUT\n\titfState : IState;\nEND_VAR\nVAR\n\tfbStateMachine : StateMachine;\n\tiDepth : INT := 0;\nEND_VAR\n",
                   "LineInfoPersistence": "(string)e4a689a8-30a8-40c4-a1a1-64a429463f54_Decl_LineIds"
                 }
               }
