@@ -6,7 +6,6 @@ END_VAR
 VAR
 	iLevel : INT := 0;
 END_VAR
-
 (* --- Implementation --- *)
 (*
  * The following do-while loop's condition assumes early-out semantics.

@@ -4,6 +4,5 @@ FUNCTION IsLibReleased : BOOL
 VAR_INPUT
 	
 END_VAR
-
 (* --- Implementation --- *)
 IsLibReleased := FALSE;
