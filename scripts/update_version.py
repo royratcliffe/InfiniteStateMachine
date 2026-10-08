@@ -50,7 +50,9 @@ def git_patch_and_build(cwd, main_branch=None):
     # from merged branches multiple times.
     patch = int(run_git(["rev-list", "--count", "--first-parent", "HEAD"], cwd))
     branch = main_branch or find_main_branch(cwd)
-    build = int(run_git(["rev-list", "--count", "--first-parent", f"{branch}..HEAD"], cwd))
+    build = int(
+        run_git(["rev-list", "--count", "--first-parent", f"{branch}..HEAD"], cwd)
+    )
     return patch, build
 
 
@@ -63,11 +65,17 @@ def find_project_information(root):
         except (json.JSONDecodeError, OSError):
             continue
         name = unwrap_string(
-            data.get("payload", {}).get("meta", {}).get("Graph", {}).get("@Value", {}).get("Name")
+            data.get("payload", {})
+            .get("meta", {})
+            .get("Graph", {})
+            .get("@Value", {})
+            .get("Name")
         )
         if name == "Project Information":
             return path, data
-    raise SystemExit(f"update_version: no Project Information object found under {root}")
+    raise SystemExit(
+        f"update_version: no Project Information object found under {root}"
+    )
 
 
 def update_version(data, patch, build):

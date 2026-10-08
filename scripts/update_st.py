@@ -164,7 +164,9 @@ def main():
     # Match the source paths against the object names derived from the relative paths.
     # Remove the file extension from the relative path to get the object name.
     for source_path in sorted(input_dir.rglob("*.st")):
-        object_path = objects.get(str(source_path.relative_to(input_dir).with_suffix("")))
+        object_path = objects.get(
+            str(source_path.relative_to(input_dir).with_suffix(""))
+        )
         if object_path is None:
             print(
                 f"update_st: skipping {source_path} (no matching object)",
