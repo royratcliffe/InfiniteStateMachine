@@ -1,2 +1,0 @@
-(* --- Interface --- *)
-PROPERTY SuperState : IState

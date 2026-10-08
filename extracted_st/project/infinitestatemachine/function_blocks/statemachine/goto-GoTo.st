@@ -1,12 +1,11 @@
 (* --- Interface --- *)
 METHOD PUBLIC GoTo
-VAR_INPUT
-	itfState : IState;
-END_VAR
 VAR
+	itfState : IState;
 	fbStateMachine : StateMachine;
 	iDepth : INT := 0;
 END_VAR
+
 (* --- Implementation --- *)
 fbStateMachine.Jump(itfState);
 WHILE iDepth < Depth() AND iDepth < fbStateMachine.Depth() AND IsSameState(AtLevel(iDepth), fbStateMachine.AtLevel(iDepth)) DO

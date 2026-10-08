@@ -1,8 +1,6 @@
 (* --- Interface --- *)
 METHOD PROTECTED Leave
-VAR_INPUT
-END_VAR
-VAR
+VAR_IN_OUT
 	itfState : IState;
 END_VAR
 

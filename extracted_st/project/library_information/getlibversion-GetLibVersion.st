@@ -4,6 +4,7 @@ FUNCTION GetLibVersion : VERSION
 VAR_INPUT
 	
 END_VAR
+
 (* --- Implementation --- *)
 GetLibVersion.uiMajor := 0;
 GetLibVersion.uiMinor := 1;
